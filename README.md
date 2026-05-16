@@ -1,5 +1,3 @@
-<img width="1600" height="853" alt="image" src="https://github.com/user-attachments/assets/ac49ae67-8211-42b6-b0a0-7693f99a3225" /># LegaPaket Mobile App
-
 Aplikasi mobile operasional ekspedisi berbasis Android menggunakan Kotlin dan XML View System.
 
 LegaPaket membantu agen ekspedisi melakukan input pengiriman, monitoring aktivitas paket, dan melihat laporan operasional langsung dari perangkat mobile.
