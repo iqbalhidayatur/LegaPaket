@@ -1,4 +1,4 @@
-# LegaPaket Mobile App
+<img width="1600" height="853" alt="image" src="https://github.com/user-attachments/assets/ac49ae67-8211-42b6-b0a0-7693f99a3225" /># LegaPaket Mobile App
 
 Aplikasi mobile operasional ekspedisi berbasis Android menggunakan Kotlin dan XML View System.
 
@@ -101,7 +101,7 @@ com.example.legapaket
 1. Clone repository
 
 ```bash
-git clone https://github.com/username/legapaket-mobile.git
+git clone https://github.com/iqbalhidayatur/legapaket.git
 ```
 
 2. Buka project di Android Studio
