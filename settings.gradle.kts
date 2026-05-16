@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Login Form"
+rootProject.name = "LegaPaket"
 include(":app")

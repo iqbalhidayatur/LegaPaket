@@ -1,4 +1,4 @@
-package com.example.loginform
+package com.example.legapaket
 
 import org.junit.Test
 
