@@ -130,7 +130,9 @@ Development
 
 ## Author
 
-"Kelompok 5 TIF RP 24 A CID"
-Haikal Zhifa Wisesa 24552011239
-Gilang M Rizki 22552011212
+  "Kelompok 5 TIF RP 24 A CID"
+Iqbal Hidayatur Rahman 24552011201
+Laila Ramadanisa       24552011214
+Haikal Zhifa Wisesa    24552011239
+Gilang M Rizki         22552011212
 
