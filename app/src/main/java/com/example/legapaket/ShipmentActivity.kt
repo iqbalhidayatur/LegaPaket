@@ -26,7 +26,10 @@ class ShipmentActivity : AppCompatActivity() {
     private lateinit var edtHeight: EditText
     private lateinit var edtPrice: EditText
 
-    // ← TAMBAH: disimpan di level class agar bisa diakses setupButton()
+    private lateinit var edtSenderName: EditText
+    private lateinit var edtSenderPhone: EditText
+    private lateinit var edtSenderAddress: EditText
+
     private var selectedPayment = "GoPay"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +45,10 @@ class ShipmentActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        edtSenderName    = findViewById(R.id.edtSenderName)
+        edtSenderPhone   = findViewById(R.id.edtSenderPhone)
+        edtSenderAddress = findViewById(R.id.edtSenderAddress)
+
         spinnerType = findViewById(R.id.spinnerType)
         spinnerCity = findViewById(R.id.spinnerCity)
         spinnerPayment = findViewById(R.id.spinner_payment)  // ← TAMBAH
@@ -146,18 +153,24 @@ class ShipmentActivity : AppCompatActivity() {
 
     private fun setupButton() {
         btnSave.setOnClickListener {
+            val senderName    = edtSenderName.text.toString()
+            val senderPhone   = edtSenderPhone.text.toString()
+            val senderAddress = edtSenderAddress.text.toString()
+            val receiver      = findViewById<EditText>(R.id.edtReceiver).text.toString()
+            val phone         = findViewById<EditText>(R.id.edtPhone).text.toString()
+            val address       = findViewById<EditText>(R.id.edtAddress).text.toString()
 
-            // Validasi sederhana
-            val receiver = findViewById<EditText>(R.id.edtReceiver).text.toString()
-            val phone    = findViewById<EditText>(R.id.edtPhone).text.toString()
-            val address  = findViewById<EditText>(R.id.edtAddress).text.toString()
-
-            if (receiver.isBlank() || phone.isBlank() || address.isBlank()) {
-                Toast.makeText(this, "Lengkapi semua data terlebih dahulu", Toast.LENGTH_SHORT).show()
+            // Validasi semua field wajib
+            if (senderName.isBlank() || senderPhone.isBlank() || senderAddress.isBlank()
+                || receiver.isBlank() || phone.isBlank() || address.isBlank()) {
+                Toast.makeText(this, "Lengkapi semua data pengirim & penerima", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             val data = ShipmentModel(
+                senderName    = senderName,
+                senderPhone   = senderPhone,
+                senderAddress = senderAddress,
                 receiver      = receiver,
                 phone         = phone,
                 address       = address,
@@ -170,20 +183,21 @@ class ShipmentActivity : AppCompatActivity() {
 
             ShipmentRepository.add(data)
 
-            // Generate nomor resi unik
             val resiNumber = "LP-${System.currentTimeMillis()}"
 
-            // Navigasi ke ResiActivity dengan membawa semua data
             val intent = Intent(this, ResiActivity::class.java).apply {
-                putExtra("resi_number",      resiNumber)
-                putExtra("receiver_name",    data.receiver)
-                putExtra("receiver_phone",   data.phone)
-                putExtra("receiver_address", data.address)
-                putExtra("receiver_city",    data.city)
-                putExtra("package_type",     data.type)
-                putExtra("weight",           data.weight)
-                putExtra("price",            data.price)
-                putExtra("payment_method",   data.paymentMethod)
+                putExtra("resi_number",       resiNumber)
+                putExtra("sender_name",       data.senderName)
+                putExtra("sender_phone",      data.senderPhone)
+                putExtra("sender_address",    data.senderAddress)
+                putExtra("receiver_name",     data.receiver)
+                putExtra("receiver_phone",    data.phone)
+                putExtra("receiver_address",  data.address)
+                putExtra("receiver_city",     data.city)
+                putExtra("package_type",      data.type)
+                putExtra("weight",            data.weight)
+                putExtra("price",             data.price)
+                putExtra("payment_method",    data.paymentMethod)
             }
             startActivity(intent)
             finish()
