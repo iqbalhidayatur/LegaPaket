@@ -7,5 +7,6 @@ data class ShipmentModel(
     val city: String,
     val type: String,
     val weight: Double,
-    val price: Int
+    val price: Int,
+    val paymentMethod: String = ""
 )

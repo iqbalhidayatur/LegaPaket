@@ -148,6 +148,25 @@
                     android:paddingEnd="16dp"
                     android:textColor="@color/text_primary"/>
 
+                <!-- Metode Pembayaran -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Metode Pembayaran"
+                    android:textColor="@color/text_primary"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="4dp"/>
+
+                <!-- Spinner pembayaran -->
+                <Spinner
+                    android:id="@+id/spinner_payment"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@drawable/rounded_card"
+                    android:padding="4dp"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
