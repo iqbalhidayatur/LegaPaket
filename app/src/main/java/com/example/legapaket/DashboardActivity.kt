@@ -84,14 +84,14 @@ class DashboardActivity : AppCompatActivity() {
     private fun loadData() {
         val activityList = ShipmentRepository.getAll().map { item ->
             ActivityModel(
-                resi          = "LP-${item.receiver.take(4).uppercase()}",
+                resi = item.resi,
                 destination   = "Tujuan: ${item.city} - ${item.receiver}",
                 status        = "TERKIRIM",
                 time          = "Baru saja",
-                type          = item.type,           // ← isi dari ShipmentModel
-                weight        = item.weight,         // ← isi dari ShipmentModel
-                price         = item.price,          // ← isi dari ShipmentModel
-                paymentMethod = item.paymentMethod   // ← isi dari ShipmentModel
+                type          = item.type,        
+                weight        = item.weight,      
+                price         = item.price,       
+                paymentMethod = item.paymentMethod
             )
         }
 

@@ -6,9 +6,9 @@ data class ActivityModel(
     val destination: String,
     val status: String,
     val time: String,
-    val type: String = "",          // ← TAMBAHKAN
-    val weight: Double = 0.0,       // ← TAMBAHKAN
-    val price: Int = 0,             // ← TAMBAHKAN
-    val paymentMethod: String = ""  // ← TAMBAHKAN
+    val type: String = "",        
+    val weight: Double = 0.0,     
+    val price: Int = 0,           
+    val paymentMethod: String = ""
 
 )

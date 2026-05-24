@@ -125,7 +125,7 @@ class ShipmentActivity : AppCompatActivity() {
             "Surabaya" -> 1.3
             "Medan"    -> 1.5
             "Makassar" -> 1.7
-            else       -> 1.0
+            else       -> 1.5
         }
 
         val total = ((weight + volume) * baseRate * cityMultiplier).toInt()
@@ -151,6 +151,27 @@ class ShipmentActivity : AppCompatActivity() {
         }
     }
 
+    private fun generateResi(city: String): String {
+
+        val cityCode = when (city) {
+            "Jakarta"  -> "JKT"
+            "Bandung"  -> "BDG"
+            "Surabaya" -> "SBY"
+            "Medan"    -> "MDN"
+            "Makassar" -> "MKS"
+            else       -> "LGP"
+        }
+
+        val date = java.text.SimpleDateFormat(
+            "ddMMyy",
+            java.util.Locale.getDefault()
+        ).format(java.util.Date())
+
+        val random = (100..999).random()
+
+        return "LP-$cityCode-$date-$random"
+    }
+
     private fun setupButton() {
         btnSave.setOnClickListener {
             val senderName    = edtSenderName.text.toString()
@@ -167,7 +188,11 @@ class ShipmentActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            val city = spinnerCity.selectedItem.toString()
+            val resiNumber = generateResi(city)
+
             val data = ShipmentModel(
+                resi          = resiNumber,
                 senderName    = senderName,
                 senderPhone   = senderPhone,
                 senderAddress = senderAddress,
@@ -182,8 +207,6 @@ class ShipmentActivity : AppCompatActivity() {
             )
 
             ShipmentRepository.add(data)
-
-            val resiNumber = "LP-${System.currentTimeMillis()}"
 
             val intent = Intent(this, ResiActivity::class.java).apply {
                 putExtra("resi_number",       resiNumber)

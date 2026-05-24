@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout: res/layout/dialog_edit_shipment.xml
+    Digunakan oleh ReportsActivity.showEditDialog()
+-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Penerima -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Penerima"
+            android:textStyle="bold"
+            android:textColor="@color/primary" />
+
+        <EditText
+            android:id="@+id/edtEditReceiver"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nama penerima"
+            android:inputType="textPersonName"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp" />
+
+        <!-- Kota -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kota Tujuan"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/edtEditCity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Kota tujuan"
+            android:inputType="textCapWords"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp" />
+
+        <!-- Tipe Pengiriman -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tipe Pengiriman"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/edtEditType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Regular / Express / Same Day / Cargo"
+            android:inputType="textCapWords"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp" />
+
+        <!-- Berat -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Berat (Kg)"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/edtEditWeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contoh: 2.5"
+            android:inputType="numberDecimal"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp" />
+
+        <!-- Harga -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ongkir (Rp)"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp" />
+
+        <EditText
+            android:id="@+id/edtEditPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contoh: 35000"
+            android:inputType="number"
+            android:background="@drawable/edittext_bg"
+            android:padding="12dp" />
+
+        <!-- Metode Pembayaran -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Metode Pembayaran"
+            android:textStyle="bold"
+            android:textColor="@color/primary"
+            android:layout_marginTop="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerEditPayment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_spinner"
+            android:padding="4dp" />
+
+    </LinearLayout>
+</ScrollView>

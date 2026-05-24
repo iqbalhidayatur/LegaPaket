@@ -12,7 +12,7 @@ class ActivityAdapter(
     private val list: List<ActivityModel>
 ) : RecyclerView.Adapter<ActivityAdapter.ViewHolder>() {
 
-    private var expandedPosition = -1  // ← track posisi yang sedang terbuka
+    private var expandedPosition: Int? = null
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         // Summary row (selalu tampil)
@@ -37,7 +37,7 @@ class ActivityAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
-        val isExpanded = position == expandedPosition
+        val isExpanded = expandedPosition == position
 
         // Isi data summary
         holder.txtResi.text        = item.resi
@@ -60,7 +60,7 @@ class ActivityAdapter(
         }
         holder.ivPaymentIcon.setImageResource(iconRes)
 
-        // Tampilkan atau sembunyikan detail dengan animasi
+        // Tampilkan atau sembunyikan detail
         if (isExpanded) {
             holder.llDetail.visibility = View.VISIBLE
             holder.llDetail.startAnimation(
@@ -84,10 +84,29 @@ class ActivityAdapter(
 
         // Klik card untuk toggle expand/collapse
         holder.itemView.setOnClickListener {
-            val prev = expandedPosition
-            expandedPosition = if (isExpanded) -1 else position
-            if (prev != -1) notifyItemChanged(prev)
-            notifyItemChanged(expandedPosition)
+
+            val currentPosition = holder.bindingAdapterPosition
+
+            if (currentPosition == RecyclerView.NO_POSITION) {
+                return@setOnClickListener
+            }
+
+            val previousExpanded = expandedPosition
+
+            expandedPosition =
+                if (expandedPosition == currentPosition) {
+                    null
+                } else {
+                    currentPosition
+                }
+
+            previousExpanded?.let {
+                notifyItemChanged(it)
+            }
+
+            expandedPosition?.let {
+                notifyItemChanged(it)
+            }
         }
     }
 

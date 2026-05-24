@@ -1,6 +1,9 @@
 package com.example.legapaket
 
 data class ShipmentModel(
+
+    val resi: String = "",
+
     val senderName: String = "",
     val senderPhone: String = "",
     val senderAddress: String = "",
