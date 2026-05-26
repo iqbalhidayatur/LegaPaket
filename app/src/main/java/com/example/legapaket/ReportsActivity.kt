@@ -2,12 +2,14 @@ package com.example.legapaket
 
 import android.Manifest
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -29,8 +31,28 @@ class ReportsActivity : AppCompatActivity() {
     private lateinit var tvPending: TextView
     private lateinit var btnExportExcel: MaterialButton
 
-    // Simpan data sebagai MutableList agar bisa diedit/hapus
-    private val reportData: MutableList<ReportModel> = mutableListOf()
+    // ─── Filter & Sort views ───────────────────────────────────────────────────
+    private lateinit var spinnerCity: Spinner
+    private lateinit var spinnerSort: Spinner
+    private lateinit var tvDateStart: TextView
+    private lateinit var tvDateEnd: TextView
+    private lateinit var btnResetFilter: MaterialButton
+
+    // Format tanggal & jam untuk tampilan item list
+    private val displayFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
+    // Format tanggal untuk label tombol rentang tanggal
+    private val dateLabel     = SimpleDateFormat("dd MMM yyyy", Locale("id", "ID"))
+
+    // Semua data mentah dari repository (tidak pernah difilter langsung)
+    private val allData: MutableList<ReportModel> = mutableListOf()
+    // Data yang ditampilkan (hasil filter + sort)
+    private val displayData: MutableList<ReportModel> = mutableListOf()
+
+    // State filter aktif
+    private var filterCity   = "Semua Kota"
+    private var filterStart: Calendar? = null
+    private var filterEnd: Calendar?   = null
+    private var sortMode     = "Terbaru"
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -39,19 +61,15 @@ class ReportsActivity : AppCompatActivity() {
         else Toast.makeText(this, "Izin storage diperlukan untuk ekspor", Toast.LENGTH_LONG).show()
     }
 
+    // ─────────────────────────────────────────────────────────────────────────
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reports)
 
-        rvReports      = findViewById(R.id.rvReports)
-        tvTotal        = findViewById(R.id.tvTotalPackage)
-        tvDelivered    = findViewById(R.id.tvDelivered)
-        tvPending      = findViewById(R.id.tvPending)
-        btnExportExcel = findViewById(R.id.btnExportExcel)
-
-        rvReports.layoutManager = LinearLayoutManager(this)
-
+        bindViews()
+        setupFilterBar()
         loadData()
+        applyFilterAndSort()
         setupAdapter()
         updateSummary()
 
@@ -62,102 +80,216 @@ class ReportsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadData()
-        setupAdapter()
+        applyFilterAndSort()
+        adapter.notifyDataSetChanged()
         updateSummary()
     }
 
-    // ─── Load data dari repository ────────────────────────────────────────────
+    // ─── Bind views ──────────────────────────────────────────────────────────
+    private fun bindViews() {
+        rvReports      = findViewById(R.id.rvReports)
+        tvTotal        = findViewById(R.id.tvTotalPackage)
+        tvDelivered    = findViewById(R.id.tvDelivered)
+        tvPending      = findViewById(R.id.tvPending)
+        btnExportExcel = findViewById(R.id.btnExportExcel)
 
+        spinnerCity    = findViewById(R.id.spinnerFilterCity)
+        spinnerSort    = findViewById(R.id.spinnerSort)
+        tvDateStart    = findViewById(R.id.tvDateStart)
+        tvDateEnd      = findViewById(R.id.tvDateEnd)
+        btnResetFilter = findViewById(R.id.btnResetFilter)
+
+        rvReports.layoutManager = LinearLayoutManager(this)
+    }
+
+    // ─── Setup dropdown filter & sort ────────────────────────────────────────
+    private fun setupFilterBar() {
+
+        // Spinner kota (diambil dinamis dari data + "Semua Kota")
+        val cities = listOf("Semua Kota", "Jakarta", "Bandung", "Surabaya", "Medan", "Makassar")
+        spinnerCity.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, cities)
+        spinnerCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p: AdapterView<*>, v: View?, pos: Int, id: Long) {
+                filterCity = cities[pos]
+                applyFilterAndSort()
+                adapter.notifyDataSetChanged()
+                updateSummary()
+            }
+            override fun onNothingSelected(p: AdapterView<*>) {}
+        }
+
+        // Spinner urutan
+        val sortOptions = listOf("Terbaru", "Terlama", "Ongkir Tertinggi", "Ongkir Terendah")
+        spinnerSort.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, sortOptions)
+        spinnerSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p: AdapterView<*>, v: View?, pos: Int, id: Long) {
+                sortMode = sortOptions[pos]
+                applyFilterAndSort()
+                adapter.notifyDataSetChanged()
+                updateSummary()
+            }
+            override fun onNothingSelected(p: AdapterView<*>) {}
+        }
+
+        // Tombol pilih tanggal mulai
+        tvDateStart.setOnClickListener { showDatePicker(isStart = true) }
+
+        // Tombol pilih tanggal selesai
+        tvDateEnd.setOnClickListener { showDatePicker(isStart = false) }
+
+        // Reset semua filter
+        btnResetFilter.setOnClickListener {
+            filterCity  = "Semua Kota"
+            filterStart = null
+            filterEnd   = null
+            sortMode    = "Terbaru"
+            spinnerCity.setSelection(0)
+            spinnerSort.setSelection(0)
+            tvDateStart.text = "Tanggal Mulai"
+            tvDateEnd.text   = "Tanggal Selesai"
+            applyFilterAndSort()
+            adapter.notifyDataSetChanged()
+            updateSummary()
+        }
+    }
+
+    // ─── DatePickerDialog ─────────────────────────────────────────────────────
+    private fun showDatePicker(isStart: Boolean) {
+        val cal = Calendar.getInstance()
+        DatePickerDialog(this, { _, year, month, day ->
+            val picked = Calendar.getInstance().apply {
+                set(year, month, day)
+                if (isStart) { set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0) }
+                else         { set(Calendar.HOUR_OF_DAY, 23); set(Calendar.MINUTE, 59); set(Calendar.SECOND, 59) }
+            }
+            if (isStart) {
+                filterStart = picked
+                tvDateStart.text = dateLabel.format(picked.time)
+            } else {
+                // Validasi: tanggal selesai tidak boleh sebelum tanggal mulai
+                if (filterStart != null && picked.before(filterStart)) {
+                    Toast.makeText(this, "Tanggal selesai tidak boleh sebelum tanggal mulai", Toast.LENGTH_SHORT).show()
+                    return@DatePickerDialog
+                }
+                filterEnd = picked
+                tvDateEnd.text = dateLabel.format(picked.time)
+            }
+            applyFilterAndSort()
+            adapter.notifyDataSetChanged()
+            updateSummary()
+        }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH)).show()
+    }
+
+    // ─── Load data dari repository ────────────────────────────────────────────
     private fun loadData() {
-        reportData.clear()
-        ShipmentRepository.getAll().mapIndexedTo(reportData) { index, it ->
-            ReportModel(
-                resi          = it.resi,
-                receiver      = it.receiver,
-                city          = it.city,
-                status        = "Processing",
-                date          = "Hari ini",
-                type          = it.type,
-                weight        = it.weight,
-                price         = it.price,
-                paymentMethod = it.paymentMethod
+        allData.clear()
+        ShipmentRepository.getAll().forEach { it ->
+            allData.add(
+                ReportModel(
+                    resi          = it.resi,
+                    receiver      = it.receiver,
+                    city          = it.city,
+                    status        = "Processing",
+                    date          = displayFormat.format(it.createdAt),
+                    createdAt     = it.createdAt,
+                    type          = it.type,
+                    weight        = it.weight,
+                    price         = it.price,
+                    paymentMethod = it.paymentMethod
+                )
             )
         }
     }
 
-    // ─── Setup adapter dengan callback edit & hapus ───────────────────────────
+    // ─── Filter + Sort → isi displayData ─────────────────────────────────────
+    private fun applyFilterAndSort() {
+        var filtered = allData.toList()
 
+        // Filter kota
+        if (filterCity != "Semua Kota") {
+            filtered = filtered.filter { it.city == filterCity }
+        }
+
+        // Filter rentang tanggal
+        filterStart?.let { start -> filtered = filtered.filter { !it.createdAt.before(start.time) } }
+        filterEnd?.let   { end   -> filtered = filtered.filter { !it.createdAt.after(end.time) } }
+
+        // Urutan
+        filtered = when (sortMode) {
+            "Terbaru"          -> filtered.sortedByDescending { it.createdAt }
+            "Terlama"          -> filtered.sortedBy { it.createdAt }
+            "Ongkir Tertinggi" -> filtered.sortedByDescending { it.price }
+            "Ongkir Terendah"  -> filtered.sortedBy { it.price }
+            else               -> filtered
+        }
+
+        displayData.clear()
+        displayData.addAll(filtered)
+    }
+
+    // ─── Setup adapter ────────────────────────────────────────────────────────
     private fun setupAdapter() {
         adapter = ReportAdapter(
-            list = reportData,
-            onEdit = { index, item -> showEditDialog(index, item) },
+            list     = displayData,
+            onEdit   = { index, item -> showEditDialog(index, item) },
             onDelete = { index -> deleteItem(index) }
         )
         rvReports.adapter = adapter
     }
 
     // ─── Hapus item ───────────────────────────────────────────────────────────
+    private fun deleteItem(displayIndex: Int) {
+        val item = displayData[displayIndex]
+        // Cari index asli di allData & repository berdasarkan resi (unik)
+        val repoIndex = ShipmentRepository.getAll().indexOfFirst { it.resi == item.resi }
+        if (repoIndex != -1) ShipmentRepository.delete(repoIndex)
 
-    private fun deleteItem(index: Int) {
-        // Hapus dari repository
-        ShipmentRepository.delete(index)
-        // Hapus dari list lokal
-        reportData.removeAt(index)
-        adapter.notifyItemRemoved(index)
-        adapter.notifyItemRangeChanged(index, reportData.size)
+        allData.removeAll { it.resi == item.resi }
+        displayData.removeAt(displayIndex)
+        adapter.notifyItemRemoved(displayIndex)
+        adapter.notifyItemRangeChanged(displayIndex, displayData.size)
         updateSummary()
         Toast.makeText(this, "Data berhasil dihapus", Toast.LENGTH_SHORT).show()
     }
 
     // ─── Dialog Edit ──────────────────────────────────────────────────────────
+    private fun showEditDialog(displayIndex: Int, item: ReportModel) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_edit_shipment, null)
 
-    private fun showEditDialog(index: Int, item: ReportModel) {
-        val dialogView = LayoutInflater.from(this)
-            .inflate(R.layout.dialog_edit_shipment, null)
-
-        // Referensi view dalam dialog
-        val edtReceiver  = dialogView.findViewById<EditText>(R.id.edtEditReceiver)
-        val edtCity      = dialogView.findViewById<EditText>(R.id.edtEditCity)
-        val edtType      = dialogView.findViewById<EditText>(R.id.edtEditType)
-        val edtWeight    = dialogView.findViewById<EditText>(R.id.edtEditWeight)
-        val edtPrice     = dialogView.findViewById<EditText>(R.id.edtEditPrice)
+        val edtReceiver    = dialogView.findViewById<EditText>(R.id.edtEditReceiver)
+        val edtCity        = dialogView.findViewById<EditText>(R.id.edtEditCity)
+        val edtType        = dialogView.findViewById<EditText>(R.id.edtEditType)
+        val edtWeight      = dialogView.findViewById<EditText>(R.id.edtEditWeight)
+        val edtPrice       = dialogView.findViewById<EditText>(R.id.edtEditPrice)
         val spinnerPayment = dialogView.findViewById<Spinner>(R.id.spinnerEditPayment)
 
-        // Isi data saat ini
         edtReceiver.setText(item.receiver)
         edtCity.setText(item.city)
         edtType.setText(item.type)
         edtWeight.setText(item.weight.toString())
         edtPrice.setText(item.price.toString())
 
-        // Setup spinner metode pembayaran
         val paymentMethods = listOf(
             PaymentMethod("GoPay",     R.drawable.ic_gopay),
             PaymentMethod("DANA",      R.drawable.ic_dana),
             PaymentMethod("ShopeePay", R.drawable.ic_shopee),
             PaymentMethod("QRIS",      R.drawable.ic_qris)
         )
-        val paymentAdapter = PaymentMethodAdapter(this, paymentMethods)
-        spinnerPayment.adapter = paymentAdapter
+        spinnerPayment.adapter = PaymentMethodAdapter(this, paymentMethods)
 
-        // Set posisi spinner ke nilai saat ini
-        val currentPaymentIndex = paymentMethods.indexOfFirst { it.name == item.paymentMethod }
-        if (currentPaymentIndex >= 0) spinnerPayment.setSelection(currentPaymentIndex)
+        val currentIdx = paymentMethods.indexOfFirst { it.name == item.paymentMethod }
+        if (currentIdx >= 0) spinnerPayment.setSelection(currentIdx)
 
         var selectedPayment = item.paymentMethod
         spinnerPayment.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, v: android.view.View?, pos: Int, id: Long) {
-                selectedPayment = paymentMethods[pos].name
-            }
-            override fun onNothingSelected(parent: AdapterView<*>) {}
+            override fun onItemSelected(p: AdapterView<*>, v: View?, pos: Int, id: Long) { selectedPayment = paymentMethods[pos].name }
+            override fun onNothingSelected(p: AdapterView<*>) {}
         }
 
-        // Bangun dialog
         AlertDialog.Builder(this)
             .setTitle("Edit Data Pengiriman")
             .setView(dialogView)
             .setPositiveButton("Simpan") { dialog, _ ->
-                // Validasi input
                 val receiver = edtReceiver.text.toString().trim()
                 val city     = edtCity.text.toString().trim()
                 val type     = edtType.text.toString().trim()
@@ -166,36 +298,30 @@ class ReportsActivity : AppCompatActivity() {
 
                 if (receiver.isBlank() || city.isBlank() || type.isBlank()
                     || weight == null || weight <= 0 || price == null || price < 0) {
-                    Toast.makeText(
-                        this,
-                        "Harap isi semua field dengan benar",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(this, "Harap isi semua field dengan benar", Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
                 }
 
-                // Update repository (ShipmentModel)
-                val existing = ShipmentRepository.getAll()[index]
-                val updated = existing.copy(
-                    receiver      = receiver,
-                    city          = city,
-                    type          = type,
-                    weight        = weight,
-                    price         = price,
-                    paymentMethod = selectedPayment
-                )
-                ShipmentRepository.update(index, updated)
+                // Update repository
+                val repoIndex = ShipmentRepository.getAll().indexOfFirst { it.resi == item.resi }
+                if (repoIndex != -1) {
+                    val existing = ShipmentRepository.getAll()[repoIndex]
+                    ShipmentRepository.update(repoIndex, existing.copy(
+                        receiver = receiver, city = city, type = type,
+                        weight = weight, price = price, paymentMethod = selectedPayment
+                    ))
+                }
 
-                // Update list lokal & UI
-                reportData[index] = item.copy(
-                    receiver      = receiver,
-                    city          = city,
-                    type          = type,
-                    weight        = weight,
-                    price         = price,
-                    paymentMethod = selectedPayment
+                // Update allData & displayData
+                val updatedItem = item.copy(
+                    receiver = receiver, city = city, type = type,
+                    weight = weight, price = price, paymentMethod = selectedPayment
                 )
-                adapter.notifyItemChanged(index)
+                val allIdx = allData.indexOfFirst { it.resi == item.resi }
+                if (allIdx != -1) allData[allIdx] = updatedItem
+                displayData[displayIndex] = updatedItem
+
+                adapter.notifyItemChanged(displayIndex)
                 updateSummary()
                 dialog.dismiss()
                 Toast.makeText(this, "Data berhasil diperbarui", Toast.LENGTH_SHORT).show()
@@ -205,29 +331,23 @@ class ReportsActivity : AppCompatActivity() {
     }
 
     // ─── Summary card ─────────────────────────────────────────────────────────
-
     private fun updateSummary() {
-        tvTotal.text     = reportData.size.toString()
-        tvDelivered.text = reportData.count { it.status == "Delivered" }.toString()
-        tvPending.text   = reportData.count { it.status == "Processing" }.toString()
+        tvTotal.text     = displayData.size.toString()
+        tvDelivered.text = displayData.count { it.status == "Delivered" }.toString()
+        tvPending.text   = displayData.count { it.status == "Processing" }.toString()
     }
 
-    // ─── Export Excel (tidak berubah) ─────────────────────────────────────────
-
+    // ─── Export Excel ─────────────────────────────────────────────────────────
     private fun exportToExcel() {
-        if (reportData.isEmpty()) {
+        if (displayData.isEmpty()) {
             Toast.makeText(this, "Tidak ada data untuk diekspor", Toast.LENGTH_SHORT).show()
             return
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            doExport()
-        } else {
-            val permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
-            if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
-                doExport()
-            } else {
-                requestPermissionLauncher.launch(permission)
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) doExport()
+        else {
+            val perm = Manifest.permission.WRITE_EXTERNAL_STORAGE
+            if (ContextCompat.checkSelfPermission(this, perm) == PackageManager.PERMISSION_GRANTED) doExport()
+            else requestPermissionLauncher.launch(perm)
         }
     }
 
@@ -235,14 +355,12 @@ class ReportsActivity : AppCompatActivity() {
         try {
             val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val fileName  = "LapLegaPaket_$timestamp.xlsx"
-            val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            downloadsDir.mkdirs()
-            val file = File(downloadsDir, fileName)
+            val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            dir.mkdirs()
+            val file = File(dir, fileName)
             writeXlsx(file)
-            android.media.MediaScannerConnection.scanFile(
-                this, arrayOf(file.absolutePath),
-                arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), null
-            )
+            android.media.MediaScannerConnection.scanFile(this, arrayOf(file.absolutePath),
+                arrayOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"), null)
             Toast.makeText(this, "Tersimpan di Downloads/$fileName", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             Toast.makeText(this, "Gagal: ${e.message}", Toast.LENGTH_LONG).show()
@@ -250,7 +368,7 @@ class ReportsActivity : AppCompatActivity() {
     }
 
     private fun writeXlsx(file: File) {
-        val headers = listOf("No","No. Resi","Penerima","Kota Tujuan","Tipe Pengiriman","Berat (Kg)","Ongkir (Rp)","Metode Pembayaran","Status","Tanggal")
+        val headers = listOf("No","No. Resi","Penerima","Kota Tujuan","Tipe Pengiriman","Berat (Kg)","Ongkir (Rp)","Metode Pembayaran","Status","Tanggal & Jam")
         val sb = StringBuilder()
         sb.append("""<?xml version="1.0" encoding="UTF-8" standalone="yes"?>""")
         sb.append("""<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>""")
@@ -259,10 +377,11 @@ class ReportsActivity : AppCompatActivity() {
             sb.append("""<c r="${colLetter(col)}1" t="inlineStr" s="1"><is><t>${title.xmlEscape()}</t></is></c>""")
         }
         sb.append("</row>")
-        reportData.forEachIndexed { idx, item ->
+        displayData.forEachIndexed { idx, item ->
             val rowNum = idx + 2
             sb.append("""<row r="$rowNum">""")
-            listOf((idx+1).toString(), item.resi, item.receiver, item.city, item.type, item.weight.toString(), item.price.toString(), item.paymentMethod, item.status, item.date)
+            listOf((idx+1).toString(), item.resi, item.receiver, item.city, item.type,
+                item.weight.toString(), item.price.toString(), item.paymentMethod, item.status, item.date)
                 .forEachIndexed { col, value ->
                     sb.append("""<c r="${colLetter(col)}$rowNum" t="inlineStr"><is><t>${value.xmlEscape()}</t></is></c>""")
                 }
@@ -299,6 +418,7 @@ class ReportsActivity : AppCompatActivity() {
 
     private fun String.xmlEscape() = replace("&","&amp;").replace("<","&lt;").replace(">","&gt;").replace("\"","&quot;").replace("'","&apos;")
 
+    // ─── Bottom navigation ────────────────────────────────────────────────────
     private fun setupNavigation() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.selectedItemId = R.id.menu_reports

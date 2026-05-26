@@ -1,5 +1,7 @@
 package com.example.legapaket
 
+import java.util.Date
+
 data class ShipmentModel(
 
     val resi: String = "",
@@ -15,5 +17,8 @@ data class ShipmentModel(
     val type: String,
     val weight: Double,
     val price: Int,
-    val paymentMethod: String = ""
+    val paymentMethod: String = "",
+
+    // Timestamp otomatis saat data dibuat
+    val createdAt: Date = Date()
 )

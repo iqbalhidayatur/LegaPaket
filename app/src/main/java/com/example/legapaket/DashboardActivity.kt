@@ -96,6 +96,10 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         recyclerActivity.layoutManager = LinearLayoutManager(this)
+
+        recyclerActivity.setHasFixedSize(false)
+        recyclerActivity.isNestedScrollingEnabled = false
+
         recyclerActivity.adapter = ActivityAdapter(activityList)
     }
 
