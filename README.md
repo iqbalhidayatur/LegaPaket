@@ -145,5 +145,3 @@ Gilang M Rizki         22552011212
 
 ## Documentation
 https://drive.google.com/drive/folders/1okRUgtoXEFw93Vwpiyh5cBSydzPt428q?usp=sharing
-
->>>>>>> 5362414a4bd048e554ae5e08085736521003c564
