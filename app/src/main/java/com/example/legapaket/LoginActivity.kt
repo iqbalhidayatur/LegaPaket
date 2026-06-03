@@ -17,8 +17,13 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
 
+        if (UserSession.restoreSession()) {
+            navigateByRole()
+            return
+        }
+
+        setContentView(R.layout.activity_login)
         initView()
         setupAction()
     }
@@ -26,15 +31,12 @@ class LoginActivity : AppCompatActivity() {
     private fun initView() {
         edtUsername = findViewById(R.id.edtUsername)
         edtPassword = findViewById(R.id.edtPassword)
-        btnLogin = findViewById(R.id.btnLogin)
-        txtForgot = findViewById(R.id.txtForgot)
+        btnLogin    = findViewById(R.id.btnLogin)
+        txtForgot   = findViewById(R.id.txtForgot)
     }
 
     private fun setupAction() {
-
-        btnLogin.setOnClickListener {
-            validateLogin()
-        }
+        btnLogin.setOnClickListener { validateLogin() }
 
         txtForgot.setOnClickListener {
             Toast.makeText(
@@ -46,7 +48,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateLogin() {
-
         val username = edtUsername.text.toString().trim()
         val password = edtPassword.text.toString().trim()
 
@@ -68,26 +69,34 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        loginDummy(username, password)
+        loginUser(username, password)
     }
 
-    private fun loginDummy(username: String, password: String) {
+    private fun loginUser(username: String, password: String) {
+        // Credentials per user
+        val credentials = mapOf(
+            "admin" to "123456",
+            "pusat" to "pusat123"
+        )
 
-        val dummyUsername = "admin"
-        val dummyPassword = "123456"
+        val correctPassword = credentials[username]
 
-        if (username == dummyUsername && password == dummyPassword) {
-
-            // Simpan sesi user yang login
+        if (correctPassword != null && password == correctPassword) {
             UserSession.login(username)
-
             Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
-
-            startActivity(Intent(this, DashboardActivity::class.java))
-            finish()
-
+            navigateByRole()
         } else {
             Toast.makeText(this, "Username atau password salah", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun navigateByRole() {
+        val intent = when {
+            UserSession.isAdmin  -> Intent(this, DashboardActivity::class.java)
+            UserSession.isPusat  -> Intent(this, ReportsActivity::class.java)
+            else                 -> Intent(this, LoginActivity::class.java)
+        }
+        startActivity(intent)
+        finish()
     }
 }

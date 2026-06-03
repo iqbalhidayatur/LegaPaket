@@ -13,7 +13,7 @@
     <include
         layout="@layout/layout_toolbar"/>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -24,6 +24,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp">
+
+            <!-- CARD STATISTIK -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -87,69 +89,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="110dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/rounded_card"
-                    android:elevation="2dp"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pending"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="12"
-                        android:textColor="@color/warning"
-                        android:textSize="28sp"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="110dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/rounded_card"
-                    android:elevation="2dp"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Batal"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="13sp"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="3"
-                        android:textColor="@color/error"
-                        android:textSize="28sp"
-                        android:textStyle="bold"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
+            <!-- BUTTON -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -162,18 +102,8 @@
                     android:layout_width="0dp"
                     android:layout_height="56dp"
                     android:layout_weight="1"
-                    android:background="@drawable/button_primary"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:padding="0dp"
                     android:text="Input Pengiriman"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp"
-                    app:backgroundTint="@null"
-                    app:cornerRadius="16dp"/>
+                    android:textAllCaps="false"/>
 
                 <Space
                     android:layout_width="12dp"
@@ -184,20 +114,12 @@
                     android:layout_width="0dp"
                     android:layout_height="56dp"
                     android:layout_weight="1"
-                    android:background="@drawable/edittext_bg"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:gravity="center"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:padding="0dp"
                     android:text="Cek Laporan"
-                    android:textAllCaps="false"
-                    android:textColor="@color/text_primary"
-                    android:textSize="13sp"
-                    app:backgroundTint="@null"
-                    app:cornerRadius="16dp"/>
+                    android:textAllCaps="false"/>
 
             </LinearLayout>
+
+            <!-- TITLE -->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -208,13 +130,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Riwayat operasional pengiriman terbaru."
-                android:textColor="@color/text_secondary"
-                android:textSize="13sp"/>
+            <!-- RECYCLER -->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerActivity"
@@ -226,15 +142,14 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface"
+        app:menu="@menu/bottom_menu"
         app:itemIconTint="@color/primary"
-        app:itemTextColor="@color/primary"
-        app:menu="@menu/bottom_menu"/>
+        app:itemTextColor="@color/primary"/>
 
 </LinearLayout>

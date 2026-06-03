@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DashboardActivity : AppCompatActivity() {
 
@@ -20,18 +22,20 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var txtToolbarGreeting: TextView
     private lateinit var txtToolbarTitle: TextView
 
+    // Format tanggal & jam untuk tampilan item
+    private val displayFormat = SimpleDateFormat("dd MMM yyyy, HH:mm", Locale("id", "ID"))
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
-        recyclerActivity = findViewById(R.id.recyclerActivity)
-        bottomNavigation = findViewById(R.id.bottomNavigation)
-        btnInputShipment = findViewById(R.id.btnInputShipment)
-        btnReports = findViewById(R.id.btnReports)
-        tvTotalMasuk = findViewById(R.id.tvTotalMasuk)
-
+        recyclerActivity   = findViewById(R.id.recyclerActivity)
+        bottomNavigation   = findViewById(R.id.bottomNavigation)
+        btnInputShipment   = findViewById(R.id.btnInputShipment)
+        btnReports         = findViewById(R.id.btnReports)
+        tvTotalMasuk       = findViewById(R.id.tvTotalMasuk)
         txtToolbarGreeting = findViewById(R.id.txtToolbarGreeting)
-        txtToolbarTitle = findViewById(R.id.txtToolbarTitle)
+        txtToolbarTitle    = findViewById(R.id.txtToolbarTitle)
 
         setupToolbar()
         setupNavigation()
@@ -40,11 +44,17 @@ class DashboardActivity : AppCompatActivity() {
         updateDashboard()
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadData()
+        updateDashboard()
+    }
+
     private fun setupToolbar() {
         val user = UserSession.currentUser
         if (user != null) {
             txtToolbarGreeting.text = "Selamat datang,"
-            txtToolbarTitle.text = user.fullName
+            txtToolbarTitle.text    = user.fullName
         }
     }
 
@@ -52,64 +62,71 @@ class DashboardActivity : AppCompatActivity() {
         tvTotalMasuk.text = ShipmentRepository.getTotal().toString()
     }
 
+    private fun loadData() {
+        val activityList = ShipmentRepository.getAll()
+            .map { item ->
+                ActivityModel(
+                    resi          = item.resi,
+                    destination   = "Tujuan: ${item.city} - ${item.receiver}",
+                    status        = "TERKIRIM",
+                    time          = displayFormat.format(item.createdAt), // ← tanggal & jam nyata
+                    createdAt     = item.createdAt,
+                    type          = item.type,
+                    weight        = item.weight,
+                    price         = item.price,
+                    paymentMethod = item.paymentMethod
+                )
+            }
+            .sortedByDescending { it.createdAt } // terbaru di atas
+
+        recyclerActivity.layoutManager = LinearLayoutManager(this)
+        recyclerActivity.adapter       = ActivityAdapter(activityList)
+    }
+
     private fun setupNavigation() {
-
         bottomNavigation.selectedItemId = R.id.menu_dashboard
-
         bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-
                 R.id.menu_dashboard -> true
-
-                R.id.menu_shipment -> {
-                    startActivity(Intent(this, ShipmentActivity::class.java))
-                    true
-                }
-
-                R.id.menu_reports -> {
-                    startActivity(Intent(this, ReportsActivity::class.java))
-                    true
-                }
-
-                R.id.menu_profile -> {
-                    startActivity(Intent(this, ProfileActivity::class.java))
-                    true
-                }
-
+                R.id.menu_shipment  -> { startActivity(Intent(this, ShipmentActivity::class.java)); true }
+                R.id.menu_reports   -> { startActivity(Intent(this, ReportsActivity::class.java)); true }
+                R.id.menu_profile   -> { startActivity(Intent(this, ProfileActivity::class.java)); true }
                 else -> false
             }
         }
     }
 
+<<<<<<< HEAD
+=======
     private fun loadData() {
-
         val activityList = ShipmentRepository.getAll().map { item ->
             ActivityModel(
-                item.receiver,
-                "Tujuan: ${item.city} - ${item.receiver}",
-                "TERKIRIM",
-                "Baru saja"
+                resi = item.resi,
+                destination   = "Tujuan: ${item.city} - ${item.receiver}",
+                status        = "TERKIRIM",
+                time          = "Baru saja",
+                type          = item.type,        
+                weight        = item.weight,      
+                price         = item.price,       
+                paymentMethod = item.paymentMethod
             )
         }
 
         recyclerActivity.layoutManager = LinearLayoutManager(this)
+
+        recyclerActivity.setHasFixedSize(false)
+        recyclerActivity.isNestedScrollingEnabled = false
+
         recyclerActivity.adapter = ActivityAdapter(activityList)
     }
 
+>>>>>>> 5362414a4bd048e554ae5e08085736521003c564
     private fun setupButton() {
-
         btnInputShipment.setOnClickListener {
             startActivity(Intent(this, ShipmentActivity::class.java))
         }
-
         btnReports.setOnClickListener {
             startActivity(Intent(this, ReportsActivity::class.java))
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        loadData()
-        updateDashboard()
     }
 }

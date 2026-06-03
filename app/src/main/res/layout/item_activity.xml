@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -10,6 +9,7 @@
     android:orientation="vertical"
     android:padding="18dp">
 
+    <!-- Baris atas: nomor resi + badge status -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,11 +42,12 @@
 
     </LinearLayout>
 
+    <!-- Tujuan & waktu (selalu tampil) -->
     <TextView
         android:id="@+id/txtDestination"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:lineSpacingExtra="2dp"
         android:text="Tujuan: Jakarta Selatan - Budi Santoso"
         android:textColor="@color/text_secondary"
@@ -56,9 +57,76 @@
         android:id="@+id/txtTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:text="Hari ini, 14:20"
         android:textColor="@color/text_secondary"
         android:textSize="13sp"/>
+
+    <!-- ───── SECTION DETAIL (toggle saat card diklik) ───── -->
+    <LinearLayout
+        android:id="@+id/ll_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_marginTop="12dp">
+
+        <!-- Garis pemisah -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#EEEEEE"
+            android:layout_marginBottom="10dp"/>
+
+        <!-- Tipe paket -->
+        <TextView
+            android:id="@+id/tv_package_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/text_primary"
+            android:text="Tipe pengiriman: -"/>  <!-- ← ubah hint default -->
+
+        <!-- Ongkir -->
+        <TextView
+            android:id="@+id/tv_cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="@color/text_primary"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Metode pembayaran dengan icon -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pembayaran: "
+                android:textSize="13sp"
+                android:textColor="@color/text_primary"/>
+
+            <ImageView
+                android:id="@+id/iv_payment_icon_detail"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:scaleType="fitCenter"
+                android:layout_marginEnd="6dp"/>
+
+            <TextView
+                android:id="@+id/tv_payment_method"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="@color/text_primary"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

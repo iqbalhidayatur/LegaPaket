@@ -1,18 +1,65 @@
 package com.example.legapaket
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ReportAdapter(private val list: List<ReportModel>) :
-    RecyclerView.Adapter<ReportAdapter.ReportViewHolder>() {
+class ReportAdapter(
+    private val list: MutableList<ReportModel>,
+<<<<<<< HEAD
+    private val canEdit: Boolean = true,          // false untuk role PUSAT
+=======
+>>>>>>> 5362414a4bd048e554ae5e08085736521003c564
+    private val onEdit: (index: Int, item: ReportModel) -> Unit,
+    private val onDelete: (index: Int) -> Unit
+) : RecyclerView.Adapter<ReportAdapter.ReportViewHolder>() {
+
+    private var expandedPosition = -1
 
     class ReportViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val resi: TextView = view.findViewById(R.id.tvResi)
-        val status: TextView = view.findViewById(R.id.tvStatus)
-        val date: TextView = view.findViewById(R.id.tvDate)
+        // Summary
+<<<<<<< HEAD
+        val resi: TextView         = view.findViewById(R.id.tvResi)
+        val status: TextView       = view.findViewById(R.id.tvStatus)
+        val date: TextView         = view.findViewById(R.id.tvDate)
+
+        // Detail
+        val llDetail: View         = view.findViewById(R.id.ll_detail)
+        val tvReceiver: TextView   = view.findViewById(R.id.tv_receiver_detail)
+        val tvCity: TextView       = view.findViewById(R.id.tv_city_detail)
+        val tvType: TextView       = view.findViewById(R.id.tv_type_detail)
+        val tvWeight: TextView     = view.findViewById(R.id.tv_weight_detail)
+        val tvPrice: TextView      = view.findViewById(R.id.tv_price_detail)
+        val tvPayment: TextView    = view.findViewById(R.id.tv_payment_method)
+        val ivPayment: ImageView   = view.findViewById(R.id.iv_payment_icon_detail)
+
+        // Action buttons
+        val btnEdit: ImageButton   = view.findViewById(R.id.btnEdit)
+=======
+        val resi: TextView        = view.findViewById(R.id.tvResi)
+        val status: TextView      = view.findViewById(R.id.tvStatus)
+        val date: TextView        = view.findViewById(R.id.tvDate)
+
+        // Detail
+        val llDetail: View        = view.findViewById(R.id.ll_detail)
+        val tvReceiver: TextView  = view.findViewById(R.id.tv_receiver_detail)
+        val tvCity: TextView      = view.findViewById(R.id.tv_city_detail)
+        val tvType: TextView      = view.findViewById(R.id.tv_type_detail)
+        val tvWeight: TextView    = view.findViewById(R.id.tv_weight_detail)
+        val tvPrice: TextView     = view.findViewById(R.id.tv_price_detail)
+        val tvPayment: TextView   = view.findViewById(R.id.tv_payment_method)
+        val ivPayment: ImageView  = view.findViewById(R.id.iv_payment_icon_detail)
+
+        // Action buttons
+        val btnEdit: ImageButton  = view.findViewById(R.id.btnEdit)
+>>>>>>> 5362414a4bd048e554ae5e08085736521003c564
+        val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReportViewHolder {
@@ -23,11 +70,125 @@ class ReportAdapter(private val list: List<ReportModel>) :
 
     override fun onBindViewHolder(holder: ReportViewHolder, position: Int) {
         val item = list[position]
-        holder.resi.text = item.resi
+        val isExpanded = position == expandedPosition
+
+        holder.resi.text   = item.resi
         holder.status.text = item.status
-        holder.date.text = item.date
+        holder.date.text   = item.date
+
+        holder.tvReceiver.text = "Penerima: ${item.receiver}"
+        holder.tvCity.text     = "Kota: ${item.city}"
+        holder.tvType.text     = "Tipe: ${item.type}"
+        holder.tvWeight.text   = "Berat: ${item.weight} Kg"
+        holder.tvPrice.text    = "Ongkir: Rp ${String.format("%,d", item.price).replace(",", ".")}"
+        holder.tvPayment.text  = item.paymentMethod
+
+        val iconRes = when (item.paymentMethod) {
+            "GoPay"     -> R.drawable.ic_gopay
+            "DANA"      -> R.drawable.ic_dana
+            "ShopeePay" -> R.drawable.ic_shopee
+            "QRIS"      -> R.drawable.ic_qris
+            else        -> R.drawable.ic_qris
+        }
+        holder.ivPayment.setImageResource(iconRes)
+
+<<<<<<< HEAD
+        val actionVisibility = if (canEdit) View.VISIBLE else View.GONE
+        holder.btnEdit.visibility   = actionVisibility
+        holder.btnDelete.visibility = actionVisibility
+
+=======
+        // Expand / collapse animasi
+>>>>>>> 5362414a4bd048e554ae5e08085736521003c564
+        if (isExpanded) {
+            holder.llDetail.visibility = View.VISIBLE
+            holder.llDetail.startAnimation(
+                AnimationUtils.loadAnimation(holder.itemView.context, R.anim.expand)
+            )
+        } else {
+            if (holder.llDetail.visibility == View.VISIBLE) {
+                val anim = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.collapse)
+                anim.setAnimationListener(object : android.view.animation.Animation.AnimationListener {
+                    override fun onAnimationStart(a: android.view.animation.Animation?) {}
+                    override fun onAnimationRepeat(a: android.view.animation.Animation?) {}
+                    override fun onAnimationEnd(a: android.view.animation.Animation?) {
+                        holder.llDetail.visibility = View.GONE
+                    }
+                })
+                holder.llDetail.startAnimation(anim)
+            } else {
+                holder.llDetail.visibility = View.GONE
+            }
+        }
+
+<<<<<<< HEAD
+        holder.itemView.setOnClickListener {
+            val currentPosition = holder.bindingAdapterPosition
+            if (currentPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+
+            val prev = expandedPosition
+            expandedPosition = if (expandedPosition == currentPosition) -1 else currentPosition
+
+            if (prev != -1) notifyItemChanged(prev)
+            if (expandedPosition != -1) notifyItemChanged(expandedPosition)
+        }
+
+        holder.btnEdit.setOnClickListener { onEdit(position, item) }
+
+=======
+        // Toggle expand saat card diklik
+        holder.itemView.setOnClickListener {
+
+            val currentPosition = holder.bindingAdapterPosition
+
+            if (currentPosition == RecyclerView.NO_POSITION) {
+                return@setOnClickListener
+            }
+
+            val prev = expandedPosition
+
+            expandedPosition =
+                if (expandedPosition == currentPosition) {
+                    -1
+                } else {
+                    currentPosition
+                }
+
+            if (prev != -1) {
+                notifyItemChanged(prev)
+            }
+
+            if (expandedPosition != -1) {
+                notifyItemChanged(expandedPosition)
+            }
+        }
+
+        // Tombol Edit — buka callback ke ReportsActivity
+        holder.btnEdit.setOnClickListener {
+            onEdit(position, item)
+        }
+
+        // Tombol Hapus — tampilkan dialog konfirmasi dulu
+>>>>>>> 5362414a4bd048e554ae5e08085736521003c564
+        holder.btnDelete.setOnClickListener {
+            AlertDialog.Builder(holder.itemView.context)
+                .setTitle("Hapus Data")
+                .setMessage("Yakin ingin menghapus resi ${item.resi}?\nData yang dihapus tidak dapat dikembalikan.")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Hapus") { dialog, _ ->
+                    dialog.dismiss()
+                    onDelete(position)
+                }
+<<<<<<< HEAD
+                .setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
+=======
+                .setNegativeButton("Batal") { dialog, _ ->
+                    dialog.dismiss()
+                }
+>>>>>>> 5362414a4bd048e554ae5e08085736521003c564
+                .show()
+        }
     }
 
     override fun getItemCount() = list.size
-
 }

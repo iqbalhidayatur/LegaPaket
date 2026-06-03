@@ -30,26 +30,25 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        btnLogout = findViewById(R.id.btnLogout)
+        btnLogout        = findViewById(R.id.btnLogout)
         bottomNavigation = findViewById(R.id.bottomNavigation)
 
-        tvFullName = findViewById(R.id.tvFullName)
-        tvAgentName = findViewById(R.id.tvAgentName)
-        tvUsernameValue = findViewById(R.id.tvUsernameValue)
-        tvEmailValue = findViewById(R.id.tvEmailValue)
-        tvPhoneValue = findViewById(R.id.tvPhoneValue)
-        tvAddressValue = findViewById(R.id.tvAddressValue)
+        tvFullName       = findViewById(R.id.tvFullName)
+        tvAgentName      = findViewById(R.id.tvAgentName)
+        tvUsernameValue  = findViewById(R.id.tvUsernameValue)
+        tvEmailValue     = findViewById(R.id.tvEmailValue)
+        tvPhoneValue     = findViewById(R.id.tvPhoneValue)
+        tvAddressValue   = findViewById(R.id.tvAddressValue)
     }
 
     private fun loadUserData() {
         val user = UserSession.currentUser ?: return
-
-        tvFullName.text = user.fullName
-        tvAgentName.text = user.agentName
+        tvFullName.text      = user.fullName
+        tvAgentName.text     = user.agentName
         tvUsernameValue.text = user.username
-        tvEmailValue.text = user.email
-        tvPhoneValue.text = user.phone
-        tvAddressValue.text = user.address
+        tvEmailValue.text    = user.email
+        tvPhoneValue.text    = user.phone
+        tvAddressValue.text  = user.address
     }
 
     private fun setupButton() {
@@ -65,24 +64,23 @@ class ProfileActivity : AppCompatActivity() {
 
         bottomNavigation.setOnItemSelectedListener {
             when (it.itemId) {
-
                 R.id.menu_dashboard -> {
-                    startActivity(Intent(this, DashboardActivity::class.java))
-                    true
+                    if (UserSession.isAdmin) {
+                        startActivity(Intent(this, DashboardActivity::class.java))
+                        true
+                    } else false   // item tidak aktif untuk PUSAT
                 }
-
                 R.id.menu_shipment -> {
-                    startActivity(Intent(this, ShipmentActivity::class.java))
-                    true
+                    if (UserSession.isAdmin) {
+                        startActivity(Intent(this, ShipmentActivity::class.java))
+                        true
+                    } else false
                 }
-
                 R.id.menu_reports -> {
                     startActivity(Intent(this, ReportsActivity::class.java))
                     true
                 }
-
                 R.id.menu_profile -> true
-
                 else -> false
             }
         }

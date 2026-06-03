@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,6 +23,9 @@
             android:orientation="vertical"
             android:padding="20dp">
 
+            <!-- ══════════════════════════════ -->
+            <!-- SECTION: DATA PENGIRIM (BARU) -->
+            <!-- ══════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +37,63 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tambah Pengiriman Baru"
+                    android:text="Data Pengirim"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <EditText
+                    android:id="@+id/edtSenderName"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="Nama Pengirim"
+                    android:inputType="textPersonName"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/text_primary"/>
+
+                <EditText
+                    android:id="@+id/edtSenderPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/edittext_bg"
+                    android:hint="No Telepon Pengirim"
+                    android:inputType="phone"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="@color/text_primary"/>
+
+                <EditText
+                    android:id="@+id/edtSenderAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/edittext_bg"
+                    android:gravity="top"
+                    android:hint="Alamat Pengirim"
+                    android:padding="16dp"
+                    android:textColor="@color/text_primary"/>
+
+            </LinearLayout>
+
+            <!-- ════════════════════════════════ -->
+            <!-- SECTION: DATA PENERIMA (existing) -->
+            <!-- ════════════════════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_card"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Data Penerima"
                     android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
@@ -47,6 +105,7 @@
                     android:layout_marginTop="16dp"
                     android:background="@drawable/edittext_bg"
                     android:hint="Nama Penerima"
+                    android:inputType="textPersonName"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:textColor="@color/text_primary"/>
@@ -57,7 +116,7 @@
                     android:layout_height="56dp"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="No Telepon"
+                    android:hint="No Telepon Penerima"
                     android:inputType="phone"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
@@ -70,7 +129,7 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/edittext_bg"
                     android:gravity="top"
-                    android:hint="Alamat Lengkap"
+                    android:hint="Alamat Lengkap Penerima"
                     android:padding="16dp"
                     android:textColor="@color/text_primary"/>
 
@@ -81,11 +140,32 @@
                     android:layout_marginTop="12dp"
                     android:background="@drawable/edittext_bg"/>
 
+            </LinearLayout>
+
+            <!-- ══════════════════════════════════ -->
+            <!-- SECTION: DETAIL PAKET (existing) -->
+            <!-- ══════════════════════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_card"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Detail Paket"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
                 <Spinner
                     android:id="@+id/spinnerType"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/edittext_bg"/>
 
                 <EditText
@@ -100,41 +180,52 @@
                     android:paddingEnd="16dp"
                     android:textColor="@color/text_primary"/>
 
-                <EditText
-                    android:id="@+id/edtLength"
+                <!-- Dimensi dalam 1 baris -->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="Panjang (cm)"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="@color/text_primary"/>
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/edtWidth"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="Lebar (cm)"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="@color/text_primary"/>
+                    <EditText
+                        android:id="@+id/edtLength"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="P (cm)"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="@color/text_primary"/>
 
-                <EditText
-                    android:id="@+id/edtHeight"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/edittext_bg"
-                    android:hint="Tinggi (cm)"
-                    android:inputType="numberDecimal"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:textColor="@color/text_primary"/>
+                    <EditText
+                        android:id="@+id/edtWidth"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="L (cm)"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="@color/text_primary"/>
+
+                    <EditText
+                        android:id="@+id/edtHeight"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/edittext_bg"
+                        android:hint="T (cm)"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textColor="@color/text_primary"/>
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/edtPrice"
@@ -142,39 +233,73 @@
                     android:layout_height="56dp"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/edittext_bg"
-                    android:hint="Ongkos Kirim"
+                    android:hint="Ongkos Kirim (otomatis)"
                     android:inputType="number"
+                    android:focusable="false"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:textColor="@color/text_primary"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+            </LinearLayout>
+
+            <!-- ══════════════════════════════════════ -->
+            <!-- SECTION: METODE PEMBAYARAN (existing) -->
+            <!-- ══════════════════════════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_card"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:orientation="horizontal">
+                    android:text="Metode Pembayaran"
+                    android:textColor="@color/text_primary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCancel"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
-                        android:layout_weight="1"
-                        android:text="Batal"/>
+                <Spinner
+                    android:id="@+id/spinner_payment"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rounded_card"
+                    android:padding="4dp"/>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSave"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="12dp"
-                        android:text="Simpan"/>
+            </LinearLayout>
 
-                </LinearLayout>
+            <!-- ════════════════ -->
+            <!-- TOMBOL AKSI     -->
+            <!-- ════════════════ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCancel"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:text="Batal"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:text="Simpan"/>
 
             </LinearLayout>
 
         </LinearLayout>
-
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
