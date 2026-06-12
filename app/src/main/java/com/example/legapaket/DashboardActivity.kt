@@ -96,31 +96,6 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-<<<<<<< HEAD
-=======
-    private fun loadData() {
-        val activityList = ShipmentRepository.getAll().map { item ->
-            ActivityModel(
-                resi = item.resi,
-                destination   = "Tujuan: ${item.city} - ${item.receiver}",
-                status        = "TERKIRIM",
-                time          = "Baru saja",
-                type          = item.type,        
-                weight        = item.weight,      
-                price         = item.price,       
-                paymentMethod = item.paymentMethod
-            )
-        }
-
-        recyclerActivity.layoutManager = LinearLayoutManager(this)
-
-        recyclerActivity.setHasFixedSize(false)
-        recyclerActivity.isNestedScrollingEnabled = false
-
-        recyclerActivity.adapter = ActivityAdapter(activityList)
-    }
-
->>>>>>> 5362414a4bd048e554ae5e08085736521003c564
     private fun setupButton() {
         btnInputShipment.setOnClickListener {
             startActivity(Intent(this, ShipmentActivity::class.java))

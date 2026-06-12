@@ -12,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ReportAdapter(
     private val list: MutableList<ReportModel>,
-<<<<<<< HEAD
     private val canEdit: Boolean = true,          // false untuk role PUSAT
-=======
->>>>>>> 5362414a4bd048e554ae5e08085736521003c564
     private val onEdit: (index: Int, item: ReportModel) -> Unit,
     private val onDelete: (index: Int) -> Unit
 ) : RecyclerView.Adapter<ReportAdapter.ReportViewHolder>() {
@@ -24,7 +21,6 @@ class ReportAdapter(
 
     class ReportViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // Summary
-<<<<<<< HEAD
         val resi: TextView         = view.findViewById(R.id.tvResi)
         val status: TextView       = view.findViewById(R.id.tvStatus)
         val date: TextView         = view.findViewById(R.id.tvDate)
@@ -41,24 +37,6 @@ class ReportAdapter(
 
         // Action buttons
         val btnEdit: ImageButton   = view.findViewById(R.id.btnEdit)
-=======
-        val resi: TextView        = view.findViewById(R.id.tvResi)
-        val status: TextView      = view.findViewById(R.id.tvStatus)
-        val date: TextView        = view.findViewById(R.id.tvDate)
-
-        // Detail
-        val llDetail: View        = view.findViewById(R.id.ll_detail)
-        val tvReceiver: TextView  = view.findViewById(R.id.tv_receiver_detail)
-        val tvCity: TextView      = view.findViewById(R.id.tv_city_detail)
-        val tvType: TextView      = view.findViewById(R.id.tv_type_detail)
-        val tvWeight: TextView    = view.findViewById(R.id.tv_weight_detail)
-        val tvPrice: TextView     = view.findViewById(R.id.tv_price_detail)
-        val tvPayment: TextView   = view.findViewById(R.id.tv_payment_method)
-        val ivPayment: ImageView  = view.findViewById(R.id.iv_payment_icon_detail)
-
-        // Action buttons
-        val btnEdit: ImageButton  = view.findViewById(R.id.btnEdit)
->>>>>>> 5362414a4bd048e554ae5e08085736521003c564
         val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
     }
 
@@ -92,14 +70,10 @@ class ReportAdapter(
         }
         holder.ivPayment.setImageResource(iconRes)
 
-<<<<<<< HEAD
         val actionVisibility = if (canEdit) View.VISIBLE else View.GONE
         holder.btnEdit.visibility   = actionVisibility
         holder.btnDelete.visibility = actionVisibility
 
-=======
-        // Expand / collapse animasi
->>>>>>> 5362414a4bd048e554ae5e08085736521003c564
         if (isExpanded) {
             holder.llDetail.visibility = View.VISIBLE
             holder.llDetail.startAnimation(
@@ -121,7 +95,6 @@ class ReportAdapter(
             }
         }
 
-<<<<<<< HEAD
         holder.itemView.setOnClickListener {
             val currentPosition = holder.bindingAdapterPosition
             if (currentPosition == RecyclerView.NO_POSITION) return@setOnClickListener
@@ -135,41 +108,6 @@ class ReportAdapter(
 
         holder.btnEdit.setOnClickListener { onEdit(position, item) }
 
-=======
-        // Toggle expand saat card diklik
-        holder.itemView.setOnClickListener {
-
-            val currentPosition = holder.bindingAdapterPosition
-
-            if (currentPosition == RecyclerView.NO_POSITION) {
-                return@setOnClickListener
-            }
-
-            val prev = expandedPosition
-
-            expandedPosition =
-                if (expandedPosition == currentPosition) {
-                    -1
-                } else {
-                    currentPosition
-                }
-
-            if (prev != -1) {
-                notifyItemChanged(prev)
-            }
-
-            if (expandedPosition != -1) {
-                notifyItemChanged(expandedPosition)
-            }
-        }
-
-        // Tombol Edit — buka callback ke ReportsActivity
-        holder.btnEdit.setOnClickListener {
-            onEdit(position, item)
-        }
-
-        // Tombol Hapus — tampilkan dialog konfirmasi dulu
->>>>>>> 5362414a4bd048e554ae5e08085736521003c564
         holder.btnDelete.setOnClickListener {
             AlertDialog.Builder(holder.itemView.context)
                 .setTitle("Hapus Data")
@@ -179,13 +117,7 @@ class ReportAdapter(
                     dialog.dismiss()
                     onDelete(position)
                 }
-<<<<<<< HEAD
                 .setNegativeButton("Batal") { dialog, _ -> dialog.dismiss() }
-=======
-                .setNegativeButton("Batal") { dialog, _ ->
-                    dialog.dismiss()
-                }
->>>>>>> 5362414a4bd048e554ae5e08085736521003c564
                 .show()
         }
     }

@@ -17,11 +17,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-<<<<<<< HEAD
         android:theme="@style/Theme.Legapaket">>
-=======
-        android:theme="@style/Theme.Legapaket">
->>>>>>> 5362414a4bd048e554ae5e08085736521003c564
 
         <activity
             android:name=".ResiActivity"
