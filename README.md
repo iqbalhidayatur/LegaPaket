@@ -1,10 +1,10 @@
-LegaPaket Mobile App
+##LegaPaket Mobile App
 
 Aplikasi mobile operasional ekspedisi berbasis Android menggunakan Kotlin dan XML View System.
 
 LegaPaket membantu agen ekspedisi melakukan input pengiriman, monitoring aktivitas paket, dan melihat laporan operasional langsung dari perangkat mobile.
 
-Fitur Utama
+#Fitur Utama
 Dashboard operasional
 Input data shipment
 Perhitungan ongkir otomatis
@@ -26,7 +26,7 @@ BottomNavigationView
 Struktur Halaman
 Dashboard
 
-Menampilkan:
+#Menampilkan:
 
 Total paket masuk
 Paket terkirim
@@ -34,7 +34,7 @@ Paket pending
 Aktivitas pengiriman terbaru
 Shipment
 
-Fitur:
+#Fitur:
 
 Input data penerima
 Input alamat
@@ -46,18 +46,20 @@ berat
 dimensi paket
 Reports
 
-Menampilkan:
+#Menampilkan:
 
 Total shipment
 Status pengiriman
 Riwayat laporan pengiriman
 Profile
 
-Menampilkan:
+#Menampilkan:
 
 Informasi akun agen
 Logout
-Struktur Project
+
+
+#Struktur Project
 com.example.legapaket
 │
 ├── DashboardActivity.kt
@@ -80,7 +82,9 @@ com.example.legapaket
 │   ├── menu
 │   ├── values
 │   └── font
-Cara Menjalankan
+
+
+#Cara Menjalankan
 Clone repository
 git clone https://github.com/iqbalhidayaturr/legapaket.git
 Buka project di Android Studio
@@ -89,7 +93,7 @@ Jalankan emulator atau device Android
 Klik Run
 Perhitungan Ongkir
 
-Rumus dasar:
+#Rumus dasar:
 
 (volume + berat) x tarif dasar x multiplier kota
 
@@ -98,7 +102,7 @@ Volume:
 panjang x lebar x tinggi / 6000
 Status Project
 
-Development
+#Development
 
 Pengembangan Selanjutnya
 Room Database
@@ -112,11 +116,14 @@ Multi Role User
 Scan Barcode AWB
 
 
-Documentation :
+#Documentation :
+UML Diagram
 https://drive.google.com/drive/u/4/folders/1okRUgtoXEFw93Vwpiyh5cBSydzPt428q
+UI Design
+https://www.figma.com/design/JSzP9h97d7DK3ZBWtiEUuj/Legapaket-UI-Final?node-id=0-1&p=f&t=3MCYI5M5qtbNZhh6-0
 
 
-Author
+#Author
 
 Iqbal Hidayatur Rahman
 Laila Ramadanisa
