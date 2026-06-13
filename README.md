@@ -60,28 +60,51 @@ Logout
 
 
 Struktur Project
+
 com.example.legapaket
+
 │
+
 ├── DashboardActivity.kt
+
 ├── ShipmentActivity.kt
+
 ├── ReportsActivity.kt
+
 ├── ProfileActivity.kt
+
 │
+
 ├── ActivityAdapter.kt
+
 ├── ReportAdapter.kt
+
 │
+
 ├── ActivityModel.kt
+
 ├── ShipmentModel.kt
+
 ├── ReportModel.kt
+
 │
+
 ├── ShipmentRepository.kt
+
 │
+
 ├── res
+
 │   ├── layout
+
 │   ├── drawable
+
 │   ├── menu
+
 │   ├── values
+
 │   └── font
+
 
 
 Cara Menjalankan
