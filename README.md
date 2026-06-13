@@ -119,15 +119,20 @@ Scan Barcode AWB
 Documentation :
 
 UML Diagram
+
 https://drive.google.com/drive/u/4/folders/1okRUgtoXEFw93Vwpiyh5cBSydzPt428q
 
 UI Design
+
 https://www.figma.com/design/JSzP9h97d7DK3ZBWtiEUuj/Legapaket-UI-Final?node-id=0-1&p=f&t=3MCYI5M5qtbNZhh6-0
 
 
 Author
 
 Iqbal Hidayatur Rahman
+
 Laila Ramadanisa
+
 Haikal Zhifa Wisesa
+
 Gilang M Rizki
