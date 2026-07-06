@@ -166,6 +166,10 @@ username : pusat
 password : pusat123
 
 
+## Documentation
+
+https://docs.google.com/document/d/1zzTjokL7vZGR80fE39kyCNj9asC4v8zF/edit?usp=sharing&ouid=110683125062245196047&rtpof=true&sd=true
+
 ## UML Diagram
 
 https://drive.google.com/drive/u/4/folders/1okRUgtoXEFw93Vwpiyh5cBSydzPt428q
