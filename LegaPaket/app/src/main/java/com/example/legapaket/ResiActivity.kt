@@ -16,8 +16,6 @@ class ResiActivity : AppCompatActivity() {
     private lateinit var webViewResi: WebView
     private lateinit var btnExportPdf: MaterialButton
     private lateinit var btnSkip: MaterialButton
-
-    // Data shipment diterima via Intent
     private var resiNumber = ""
     private var receiverName = ""
     private var receiverPhone = ""
@@ -27,7 +25,6 @@ class ResiActivity : AppCompatActivity() {
     private var weight = 0.0
     private var price = 0
     private var paymentMethod = ""
-
     private var senderName = ""
     private var senderPhone = ""
     private var senderAddress = ""
@@ -74,9 +71,9 @@ class ResiActivity : AppCompatActivity() {
 
         val htmlContent = buildHtml(
             resi          = resiNumber,
-            senderName    = senderName,      // ← TAMBAH
-            senderPhone   = senderPhone,     // ← TAMBAH
-            senderAddress = senderAddress,   // ← TAMBAH
+            senderName    = senderName,
+            senderPhone   = senderPhone,
+            senderAddress = senderAddress,
             name          = receiverName,
             phone         = receiverPhone,
             address       = receiverAddress,
@@ -93,7 +90,7 @@ class ResiActivity : AppCompatActivity() {
             ) = true
         }
 
-        // ← Ganti dari file:///android_asset/ — base URL untuk folder assets
+        // Ganti dari file:///android_asset/ — base URL untuk folder assets
         webViewResi.loadDataWithBaseURL(
             "file:///android_asset/",
             htmlContent,

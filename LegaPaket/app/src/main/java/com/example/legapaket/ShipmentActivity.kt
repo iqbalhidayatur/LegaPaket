@@ -14,7 +14,7 @@ class ShipmentActivity : AppCompatActivity() {
 
     private lateinit var spinnerType: Spinner
     private lateinit var spinnerCity: Spinner
-    private lateinit var spinnerPayment: Spinner  // ← TAMBAH
+    private lateinit var spinnerPayment: Spinner
 
     private lateinit var btnSave: MaterialButton
     private lateinit var btnCancel: MaterialButton
@@ -38,7 +38,7 @@ class ShipmentActivity : AppCompatActivity() {
 
         initView()
         setupSpinner()
-        setupPaymentSpinner()  // ← TAMBAH
+        setupPaymentSpinner()
         setupNavigation()
         setupAutoPrice()
         setupButton()
@@ -51,7 +51,7 @@ class ShipmentActivity : AppCompatActivity() {
 
         spinnerType = findViewById(R.id.spinnerType)
         spinnerCity = findViewById(R.id.spinnerCity)
-        spinnerPayment = findViewById(R.id.spinner_payment)  // ← TAMBAH
+        spinnerPayment = findViewById(R.id.spinner_payment)
 
         btnSave = findViewById(R.id.btnSave)
         btnCancel = findViewById(R.id.btnCancel)
@@ -64,7 +64,6 @@ class ShipmentActivity : AppCompatActivity() {
         edtPrice = findViewById(R.id.edtPrice)
     }
 
-    // ← TAMBAH: fungsi khusus setup spinner pembayaran
     private fun setupPaymentSpinner() {
         val paymentMethods = listOf(
             PaymentMethod("GoPay",     R.drawable.ic_gopay),

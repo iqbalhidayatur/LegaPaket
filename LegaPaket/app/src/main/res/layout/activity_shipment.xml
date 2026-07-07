@@ -23,9 +23,6 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <!-- ══════════════════════════════ -->
-            <!-- SECTION: DATA PENGIRIM (BARU) -->
-            <!-- ══════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -79,9 +76,6 @@
 
             </LinearLayout>
 
-            <!-- ════════════════════════════════ -->
-            <!-- SECTION: DATA PENERIMA (existing) -->
-            <!-- ════════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -142,9 +136,6 @@
 
             </LinearLayout>
 
-            <!-- ══════════════════════════════════ -->
-            <!-- SECTION: DETAIL PAKET (existing) -->
-            <!-- ══════════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -180,7 +171,6 @@
                     android:paddingEnd="16dp"
                     android:textColor="@color/text_primary"/>
 
-                <!-- Dimensi dalam 1 baris -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -242,9 +232,6 @@
 
             </LinearLayout>
 
-            <!-- ══════════════════════════════════════ -->
-            <!-- SECTION: METODE PEMBAYARAN (existing) -->
-            <!-- ══════════════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -271,9 +258,6 @@
 
             </LinearLayout>
 
-            <!-- ════════════════ -->
-            <!-- TOMBOL AKSI     -->
-            <!-- ════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -18,7 +18,7 @@ object ShipmentRepository {
         }.time
     }
 
-    // ─── Seed data awal (hanya dipakai saat file JSON belum ada) ─────────────
+    // ─── Seed data awal ────
 
     private fun seedData(): List<ShipmentModel> = listOf(
         ShipmentModel(
@@ -165,7 +165,6 @@ object ShipmentRepository {
         if (loaded) return
         val fromFile = LocalStorage.loadShipments()
         if (fromFile.isEmpty()) {
-            // Pertama kali install: isi seed data & langsung simpan ke file
             shipmentList.addAll(seedData())
             persist()
         } else {
