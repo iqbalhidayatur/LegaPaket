@@ -187,10 +187,10 @@ https://www.figma.com/design/JSzP9h97d7DK3ZBWtiEUuj/Legapaket-UI-Final?node-id=0
 
 # Author
 
-Iqbal Hidayatur Rahman
+Iqbal Hidayatur Rahman (24552011201) as FullStack Dev
 
-Laila Ramadanisa
+Laila Ramadanisa (24552011214) as Front end Dev
 
-Haikal Zhifa Wisesa
+Haikal Zhifa Wisesa (24552011239) as UI/UX Designer
 
-Gilang M Rizki
+Gilang M Rizki (22552011212) as Back end Dev
