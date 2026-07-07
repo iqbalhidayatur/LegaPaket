@@ -109,7 +109,7 @@ com.example.legapaket
 
 # Cara Menjalankan
 Clone repository
-git clone https://github.com/iqbalhidayaturr/legapaket.git
+git clone https://github.com/iqbalhidayatur/legapaket.git
 Buka project di Android Studio
 Sync Gradle
 Jalankan emulator atau device Android
@@ -167,6 +167,12 @@ password : pusat123
 
 
 ## Documentation
+
+Video :
+
+https://youtu.be/JXiiBUuLo3Q
+
+Laporan
 
 https://docs.google.com/document/d/1zzTjokL7vZGR80fE39kyCNj9asC4v8zF/edit?usp=sharing&ouid=110683125062245196047&rtpof=true&sd=true
 
